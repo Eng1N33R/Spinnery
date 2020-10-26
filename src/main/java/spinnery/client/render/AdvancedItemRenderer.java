@@ -86,7 +86,7 @@ public class AdvancedItemRenderer implements SynchronousResourceReloadListener {
 			} else {
 				boolean isSolid;
 
-				if (renderMode != ModelTransformation.Mode.GUI && !renderMode.method_29998() && stack.getItem() instanceof BlockItem) {
+				if (renderMode != ModelTransformation.Mode.GUI && !renderMode.isFirstPerson() && stack.getItem() instanceof BlockItem) {
 					Block block = ((BlockItem) stack.getItem()).getBlock();
 					isSolid = !(block instanceof TransparentBlock) && !(block instanceof StainedGlassPaneBlock);
 				} else {
@@ -104,7 +104,7 @@ public class AdvancedItemRenderer implements SynchronousResourceReloadListener {
 
 					if (renderMode == ModelTransformation.Mode.GUI) {
 						entry.getModel().multiply(0.5F);
-					} else if (renderMode.method_29998()) {
+					} else if (renderMode.isFirstPerson()) {
 						entry.getModel().multiply(0.75F);
 					}
 
@@ -137,11 +137,11 @@ public class AdvancedItemRenderer implements SynchronousResourceReloadListener {
 	}
 
 	public static VertexConsumer getGlintVertexConsumer(VertexConsumerProvider vertexConsumerProvider, RenderLayer renderLayer, MatrixStack.Entry entry) {
-		return VertexConsumers.dual(new TransformingVertexConsumer(vertexConsumerProvider.getBuffer(RenderLayer.getGlint()), entry.getModel(), entry.getNormal()), vertexConsumerProvider.getBuffer(renderLayer));
+		return VertexConsumers.dual(new OverlayVertexConsumer(vertexConsumerProvider.getBuffer(RenderLayer.getGlint()), entry.getModel(), entry.getNormal()), vertexConsumerProvider.getBuffer(renderLayer));
 	}
 
 	public static VertexConsumer getDirectGlintVertexConsumer(VertexConsumerProvider vertexConsumerProvider, RenderLayer renderLayer, MatrixStack.Entry entry) {
-		return VertexConsumers.dual(new TransformingVertexConsumer(vertexConsumerProvider.getBuffer(RenderLayer.getGlintDirect()), entry.getModel(), entry.getNormal()), vertexConsumerProvider.getBuffer(renderLayer));
+		return VertexConsumers.dual(new OverlayVertexConsumer(vertexConsumerProvider.getBuffer(RenderLayer.getGlintDirect()), entry.getModel(), entry.getNormal()), vertexConsumerProvider.getBuffer(renderLayer));
 	}
 
 	public static VertexConsumer getArmorVertexConsumer(VertexConsumerProvider vertexConsumers, RenderLayer layer, boolean solid, boolean glint) {
